@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Training on Vimeo90K Triplet Dataset for 2x Frame Interpolation
+
+
+# Generates optical flow pseudo label
+# python generate_flow.py
+
+# Train model with Vimeo90K Dataset for 2x Frame Interpolation 
+
+# IFRNet = regular model
+#python -m torch.distributed.launch --nproc_per_node=1 train_vimeo90k.py --model_name 'IFRNet' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+# IFRNet_L = large model
+# python -m torch.distributed.launch --nproc_per_node=1 train_vimeo90k.py --model_name 'IFRNet_L' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+# IFRNet_S = small model
+python -m torch.distributed.run --nproc_per_node=1 train_vimeo90k.py --model_name 'IFRNet_S' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+
+# Benchmarks for 2x Frame Interpolation
+
+# provides inference time and model parameters
+# python benchmarks/speed_parameters.py
+
+# python benchmarks/Vimeo90K.py

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Training on MSU Triplet Dataset for 2x Frame Interpolation
+
+
+# Generates optical flow pseudo label - only run once (already generated)
+# python generate_flow_msu.py
+
+
+# Train model with MSU Dataset for 2x Frame Interpolation 
+
+# IFRNet = regular model
+# python -m torch.distributed.launch --nproc_per_node=1 train_msu.py --model_name 'IFRNet' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+# IFRNet_L = large model
+# python -m torch.distributed.launch --nproc_per_node=1 train_msu.py --model_name 'IFRNet_L' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+# Nastaran & Raj: go to file. 
+# Change pretrained flag as necessary
+# Nastaran: pretrained = 1
+# Raj: pretrained = 0
+# Change gpu flag if you have single or multiple gpu
+# single_gpu = 1  (if you have single gpu such as Daniel)
+# single_gpu = 0  (if you have multiple gpu, make sure to change --nproc_per_node=number of gpu you have)
+python -m torch.distributed.run --nproc_per_node=1 train_msu.py --model_name 'IFRNet_S' --epochs 300 --batch_size 6 --lr_start 1e-4 --lr_end 1e-5
+
+
+# Benchmarks for 2x Frame Interpolation
+
+# provides inference time and model parameters - Raj, run separate after pruning
+# python benchmarks/speed_parameters.py
+
+# Nastaran & Raj: go to file. Change pretrained flag as necessary
+# Nastaran: pretrained = 1
+# Raj: pretrained = 0
+# python benchmarks/MSU.py
